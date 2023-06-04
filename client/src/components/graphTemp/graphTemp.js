@@ -24,8 +24,6 @@ ChartJS.register(
 );
 
 const GraphTemp = ({ time, temp }) => {
-  console.log(time);
-  console.log(temp);
   const data = {
     labels: time,
     datasets: [

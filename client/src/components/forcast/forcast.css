@@ -124,3 +124,7 @@ color:white
    justify-content: center;
    align-items:center;
 } */
+
+.location p{
+  font-size:3rem;
+}

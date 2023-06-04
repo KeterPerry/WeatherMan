@@ -5,14 +5,14 @@ import GraphTemp from "../graphTemp/graphTemp";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Button from "@mui/material/Button";
-import { useCoordinates } from "../../context/Coordinates.context";
+import { useWeatherData } from "../../context/weatherData.context";
 
 const HistoricalData = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [temp, setTemp] = useState("");
   const [time, setTime] = useState("");
-  const { lat, lon } = useCoordinates();
+  const { lat, lon } = useWeatherData();
 
   const latFloat = Math.round(lat * 100) / 100;
   const lonFloat = Math.round(lon * 100) / 100;

@@ -1,14 +1,15 @@
 import React, { useState, useContext } from "react";
 
-const CoordinateContext = React.createContext();
+const WeatherDataContext = React.createContext();
 
-export function useCoordinates() {
-  return useContext(CoordinateContext);
+export function useWeatherData() {
+  return useContext(WeatherDataContext);
 }
 
-export function CoordinateProvider({ children }) {
+export function WeatherDataProvider({ children }) {
   const [lat, setLatitude] = useState();
   const [lon, setLongitude] = useState();
+
   const [data, setData] = useState({
     temperature: "",
     windspeed: "",
@@ -17,6 +18,8 @@ export function CoordinateProvider({ children }) {
     humidity: "",
     daysOfTheWeekTemp: [],
     time: [],
+    active: false,
+    location: "",
   });
 
   const value = {
@@ -29,10 +32,10 @@ export function CoordinateProvider({ children }) {
   };
 
   return (
-    <CoordinateContext.Provider value={value}>
+    <WeatherDataContext.Provider value={value}>
       {children}
-    </CoordinateContext.Provider>
+    </WeatherDataContext.Provider>
   );
 }
 
-export default CoordinateProvider;
+export default WeatherDataProvider;

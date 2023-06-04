@@ -9,22 +9,20 @@ import { WiHumidity } from "react-icons/wi";
 import GraphTemp from "../graphTemp/graphTemp";
 import { weatherCodeData } from "../../data/weatherCode.jsx";
 import Button from "@mui/material/Button";
-import { useCoordinates } from "../../context/Coordinates.context";
+import { useWeatherData } from "../../context/weatherData.context";
 import Section1 from "../Section1/section1";
 
 const Forcast = () => {
   const date = moment();
   const { lat, lon, setLatitude, setLongitude, data, setData } =
-    useCoordinates();
+    useWeatherData();
   const navigate = useNavigate();
   const [currentDate] = useState(date.format("YYYY-MM-DD"));
   const [yesterday] = useState(date.subtract(1, "days").format("YYYY-MM-DD"));
   const [location, setLocation] = useState("");
-  const [isLocation, setisLocation] = useState(false);
   const [weatherCodeStateData, setWeatherCodeStateData] = useState({});
 
   useEffect(() => {
-    console.log({ name: "data update", data });
     if (data.weathercode !== "") {
       const determineWeatherData = () => {
         switch (data.weathercode) {
@@ -93,10 +91,15 @@ const Forcast = () => {
       const humidity = humidityData.data.daily.relative_humidity_2m_max[0];
 
       setData((prev) => {
-        return { ...prev, humidity, time, daysOfTheWeekTemp };
+        return {
+          ...prev,
+          humidity,
+          time,
+          daysOfTheWeekTemp,
+          active: true,
+          location,
+        };
       });
-
-      setisLocation(true);
     } catch (err) {
       console.error(err.message);
     }
@@ -129,26 +132,27 @@ const Forcast = () => {
               />
             </div>
             <div className="container">
-              {isLocation && (
+              {data.active && (
                 <div className="top">
                   <div className="location">
                     <p>
-                      {location.charAt(0).toUpperCase() + location.slice(1)}
+                      {data.location.charAt(0).toUpperCase() +
+                        data.location.slice(1)}
                     </p>
                   </div>
                   <div className="temperature">
-                    {isLocation ? (
+                    {data.active ? (
                       <h1>{data.temperature.toFixed()}°C</h1>
                     ) : null}
                   </div>
-                  <div>{currentDate}</div>
-                  {isLocation && (
+                  <div className="currentDataForCast">{currentDate}</div>
+                  {data.active && (
                     <div className="des">{weatherCodeStateData.des}</div>
                   )}
                 </div>
               )}
 
-              {isLocation ? (
+              {data.active ? (
                 <div className="bottom">
                   <div>
                     <img src={weatherCodeStateData.img} alt="sun"></img>
@@ -181,7 +185,7 @@ const Forcast = () => {
           </div>
         </div>
         <br></br>
-        {isLocation ? (
+        {data.active ? (
           <GraphTemp time={data.time} temp={data.daysOfTheWeekTemp} />
         ) : null}
         <br></br>
@@ -194,7 +198,7 @@ const Forcast = () => {
           />
         ) : null}
         <br></br>
-        {isLocation ? (
+        {data.active ? (
           <div
             style={{
               display: "flex",
