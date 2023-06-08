@@ -12,7 +12,9 @@
     flex-direction:column;
     gap:3rem;
     margin-top: 3rem;
+    align-items: center;
 }
+
 
 .historicalData-cont{
     font-size: 1.5rem;

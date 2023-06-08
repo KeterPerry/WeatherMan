@@ -6,6 +6,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Button from "@mui/material/Button";
 import { useWeatherData } from "../../context/weatherData.context";
+import Error from "../errorPopUp/error";
 
 const HistoricalData = () => {
   const [startDate, setStartDate] = useState(new Date());
@@ -13,9 +14,10 @@ const HistoricalData = () => {
   const [temp, setTemp] = useState("");
   const [time, setTime] = useState("");
   const { lat, lon } = useWeatherData();
-
+  const [errorPopUp, setErrorPopUp] = useState(false);
   const latFloat = Math.round(lat * 100) / 100;
   const lonFloat = Math.round(lon * 100) / 100;
+  const [error, setError] = useState("");
 
   function convert(str) {
     var date = new Date(str),
@@ -28,12 +30,15 @@ const HistoricalData = () => {
   const convertedStart = convert(startDate);
 
   const searchHistory = (event) => {
-    if (
-      Number.parseInt(convertedEnd.slice(0, 4)) < 1940 ||
-      Number.parseInt(convertedStart.slice(0, 4)) < 1940
-    ) {
-      alert("Please enter a year from 1940 up");
-    }
+    setError("");
+    setTemp("");
+    setTime("");
+    // if (
+    //   Number.parseInt(convertedEnd.slice(0, 4)) < 1940 ||
+    //   Number.parseInt(convertedStart.slice(0, 4)) < 1940
+    // ) {
+    //   alert("Please enter a year from 1940 up");
+    // }
     fetchHistorydata(convertedStart, convertedEnd);
   };
 
@@ -49,7 +54,9 @@ const HistoricalData = () => {
       const time = HistoricalData.data.daily.time;
       setTime(time);
     } catch (err) {
-      console.error(err);
+      console.error(err.response.data.reason);
+      setError(err.response.data.reason);
+      setErrorPopUp(true);
     }
   };
 
@@ -92,8 +99,10 @@ const HistoricalData = () => {
             </Button>
           </div>
         </div>
+        {errorPopUp ? (
+          <Error setErrorPopUp={setErrorPopUp} error={error} />
+        ) : null}
       </div>
-
       {temp && time ? (
         <div>
           <GraphTemp time={time} temp={temp} />{" "}

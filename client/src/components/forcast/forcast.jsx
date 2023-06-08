@@ -69,39 +69,44 @@ const Forcast = () => {
         `https://geocoding-api.open-meteo.com/v1/search?name=${location}&count=1&language=en&format=json`
       );
 
-      const lat = data.results[0].latitude;
-      const lon = data.results[0].longitude;
+      if (!data.results) {
+        alert("Please enter a valid location name");
+      } else {
+        const lat = data.results[0].latitude;
+        const lon = data.results[0].longitude;
 
-      setLatitude(lat);
-      setLongitude(lon);
+        console.log({ lat, lon });
+        setLatitude(lat);
+        setLongitude(lon);
 
-      const weatherData = await axios.get(
-        `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&daily=temperature_2m_max&timezone=auto`
-      );
+        const weatherData = await axios.get(
+          `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&daily=temperature_2m_max&timezone=auto`
+        );
 
-      setData(weatherData.data.current_weather);
+        setData(weatherData.data.current_weather);
 
-      const daysOfTheWeekTemp = weatherData.data.daily.temperature_2m_max;
+        const daysOfTheWeekTemp = weatherData.data.daily.temperature_2m_max;
 
-      const time = weatherData.data.daily.time;
+        const time = weatherData.data.daily.time;
 
-      const humidityData = await axios.get(
-        `https://climate-api.open-meteo.com/v1/climate?latitude=${lat}&longitude=${lon}&start_date=${currentDate}&end_date=${currentDate}&daily=relative_humidity_2m_max&models=MRI_AGCM3_2_S`
-      );
-      const humidity = humidityData.data.daily.relative_humidity_2m_max[0];
+        const humidityData = await axios.get(
+          `https://climate-api.open-meteo.com/v1/climate?latitude=${lat}&longitude=${lon}&start_date=${currentDate}&end_date=${currentDate}&daily=relative_humidity_2m_max&models=MRI_AGCM3_2_S`
+        );
+        const humidity = humidityData.data.daily.relative_humidity_2m_max[0];
 
-      setData((prev) => {
-        return {
-          ...prev,
-          humidity,
-          time,
-          daysOfTheWeekTemp,
-          active: true,
-          location,
-        };
-      });
+        setData((prev) => {
+          return {
+            ...prev,
+            humidity,
+            time,
+            daysOfTheWeekTemp,
+            active: true,
+            location,
+          };
+        });
+      }
     } catch (err) {
-      console.error(err.message);
+      console.error(err.response.data);
     }
   };
 

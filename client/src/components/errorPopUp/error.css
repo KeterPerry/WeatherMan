@@ -1,0 +1,25 @@
+
+
+.error-cont{
+    color: red;
+    font-size: 2rem;
+    font-weight: bold;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    display: flex;
+    flex-direction: column;
+    gap:3rem;
+    border:1px red solid;
+    padding:2rem 2rem;
+    width: max-content;
+    height: 30vh;
+    
+    
+}
+.close{
+    border:1px red solid;
+    width:max-content;
+    padding:0rem 0.8rem;
+    align-self: right;
+    cursor: pointer;
+    
+}

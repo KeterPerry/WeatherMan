@@ -2,7 +2,8 @@
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;  
     font-size: 2rem;
     background-color: rgba(146, 149, 171, 0.203);
-    height: 10vh; 
+    height: 10vh;
+    cursor: pointer; 
 }
 
 
